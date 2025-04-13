@@ -1,0 +1,40 @@
+version: 0.2
+
+env:
+  variables:
+    DB_NAME: "food-donation-x23389770"
+    DB_USER: "admin"
+    DB_HOST: "food-donation-x23389770.ccvpvj32idfp.ap-southeast-1.rds.amazonaws.com"
+    DB_PASSWORD: 'food-donation-x23389770'
+    DB_PORT: "3306"
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - echo "<-- RUNTIME EXECUTION -->"
+      - pip install --upgrade pip
+      - pip install -r requirements.txt pylint
+
+  pre_build:
+    commands:
+      - echo "PRE-Build stage"
+      - python --version
+      - echo "pre build stage completed"
+
+
+  build:
+    commands:
+      - echo "Build Stage"
+      - echo "PyLint Started"
+      - pylint kind_bites/**/*.py || true
+      - echo "pre build stage completed - PyLint Completed!!"
+      - echo "Django Test Cases Started"
+      - python manage.py test
+      - echo "Django Test Cases Completed!!"
+      - echo "Build stage completed!"
+
+artifacts:
+  files:
+    - '**/*'
